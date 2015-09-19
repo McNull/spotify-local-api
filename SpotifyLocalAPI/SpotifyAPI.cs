@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Net;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace JariZ
 {
@@ -181,19 +182,25 @@ namespace JariZ
         /// <returns></returns>
         public static string GetOAuth()
         {
-            string raw = new WebClient().DownloadString("https://embed.spotify.com/openplay/?uri=spotify:track:5Zp4SWOpbuOdnsxLqwgutt");
-            raw = raw.Replace(" ", "");
-            string[] lines = raw.Split(new string[] { "\n" }, StringSplitOptions.None);
-            foreach (string line in lines)
-            {
-                if (line.StartsWith("tokenData"))
-                {
-                    string[] l = line.Split(new string[] { "'" }, StringSplitOptions.None);
-                    return l[1];
-                }
-            }
+            string raw = new WebClient().DownloadString("https://open.spotify.com/token");
 
-            throw new Exception("Could not find OAuth token");
+            var jo = JObject.Parse(raw);
+            return jo["t"].ToString();
+
+
+            //string raw = new WebClient().DownloadString("https://embed.spotify.com/openplay/?uri=spotify:track:5Zp4SWOpbuOdnsxLqwgutt");
+            //raw = raw.Replace(" ", "");
+            //string[] lines = raw.Split(new string[] { "\n" }, StringSplitOptions.None);
+            //foreach (string line in lines)
+            //{
+            //    if (line.StartsWith("tokenData"))
+            //    {
+            //        string[] l = line.Split(new string[] { "'" }, StringSplitOptions.None);
+            //        return l[1];
+            //    }
+            //}
+
+            //throw new Exception("Could not find OAuth token");
         }
 
 
